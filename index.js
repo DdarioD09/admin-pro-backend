@@ -8,11 +8,14 @@ const { dbConection } = require('./database/config');
 // Create express server
 const app = express();
 
+// CORS configuration
+app.use(cors());
+
+// Read and parse of the body
+app.use(express.json());
+
 // Database
 dbConection();
-
-// Cors configuration
-app.use(cors());
 
 // Create express server
 app.listen(process.env.PORT, () => {
@@ -20,9 +23,5 @@ app.listen(process.env.PORT, () => {
 });
 
 // Routes
-app.get('/', (req, res) => {
-    res.json({
-        ok: true,
-        message: 'Hello world'
-    })
-});
+app.use('/api/users', require('./routes/user-routes'))
+
