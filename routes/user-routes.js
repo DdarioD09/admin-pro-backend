@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
 
-const { getUsers, createUser } = require('../controlles/user-controller');
+const { getUsers, createUser, updateUser } = require('../controlles/user-controller');
 const { fieldValidation } = require('../middlewares/field-validation');
 
 const router = Router();
@@ -16,5 +16,14 @@ router.post('/',
         fieldValidation
     ],
     createUser);
+
+router.put('/:id',
+    [
+        check('name', 'Name is required').not().isEmpty(),
+        check('email', 'Email is required').isEmail(),
+        check('role', 'Role is required').not().isEmpty(),
+        fieldValidation
+    ],
+    updateUser);
 
 module.exports = router;

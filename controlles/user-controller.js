@@ -21,7 +21,7 @@ const createUser = async (req, res = response) => {
         if (emailExists) {
             return res.status(400).json({
                 ok: false,
-                message: 'The email is already registered'
+                msg: 'The email is already registered'
             });
         }
 
@@ -43,11 +43,54 @@ const createUser = async (req, res = response) => {
         console.log(error);
         res.status(500).json({
             ok: false,
-            message: 'Unexpected error... check logs'
+            msg: 'Unexpected error... check logs'
         })
     }
 }
 
+const updateUser = async (req, res) => {
+    // TODO Validate token and check if the user is correct
+    const uid = req.params.id;
+
+    try {
+        const userDB = await User.findById(uid);
+
+        if (!userDB) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'Bad request, user with the specified id does not exists'
+            });
+        }
+
+        // Update
+        const { password, google, email, ...fields } = req.body;
+        if (userDB.email !== email) {
+            const emailExists = await User.findOne({ email });
+            if (emailExists) {
+                return res.status(400).json({
+                    ok: false,
+                    msg: 'The email is already registered'
+                });
+            }
+        }
+
+        fields.email = email;
+        const updatedUser = await User.findByIdAndUpdate(uid, fields, { new: true });
+
+        res.json({
+            ok: true,
+            user: updatedUser
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Unexpected error'
+        });
+    }
+}
+
 module.exports = {
-    getUsers, createUser
+    getUsers, createUser, updateUser
 }
