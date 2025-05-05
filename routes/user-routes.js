@@ -3,10 +3,11 @@ const { check } = require('express-validator');
 
 const { getUsers, createUser, updateUser, deleteUser } = require('../controlles/user-controller');
 const { fieldValidation } = require('../middlewares/field-validation');
+const { JWTValidation } = require('../middlewares/jwt-validation');
 
 const router = Router();
 
-router.get('/', getUsers);
+router.get('/', JWTValidation, getUsers);
 
 router.post('/',
     [
@@ -19,6 +20,7 @@ router.post('/',
 
 router.put('/:id',
     [
+        JWTValidation,
         check('name', 'Name is required').not().isEmpty(),
         check('email', 'Email is required').isEmail(),
         check('role', 'Role is required').not().isEmpty(),
@@ -26,6 +28,6 @@ router.put('/:id',
     ],
     updateUser);
 
-router.delete('/:id', deleteUser);
+router.delete('/:id', JWTValidation, deleteUser);
 
 module.exports = router;
