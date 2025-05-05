@@ -91,6 +91,35 @@ const updateUser = async (req, res) => {
     }
 }
 
+deleteUser = async (req, res = response) => {
+    const uid = req.params.id;
+
+    try {
+        const userDB = await User.findById(uid);
+
+        if (!userDB) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'Bad request, user with the specified id does not exists'
+            });
+        }
+
+        await User.findByIdAndDelete(uid);
+
+        res.json({
+            ok: true,
+            msg: 'User deleted'
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Unexpected error'
+        });
+    }
+}
+
 module.exports = {
-    getUsers, createUser, updateUser
+    getUsers, createUser, updateUser, deleteUser
 }
