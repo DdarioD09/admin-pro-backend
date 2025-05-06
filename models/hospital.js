@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 
-const HospitalSchema = Schema({
+const HospitalSchema = new Schema({
     name: {
         type: String,
         required: true
@@ -9,6 +9,7 @@ const HospitalSchema = Schema({
         type: String
     },
     user: {
+        required: true,
         type: Schema.Types.ObjectId,
         ref: 'User'
     }
@@ -19,4 +20,4 @@ HospitalSchema.method('toJSON', function () {
     return object;
 })
 
-module.exports = model('User', HospitalSchema);
+module.exports = model('Hospital', HospitalSchema);
