@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs')
 
 const { generateJWT } = require('../helpers/jwt');
 const User = require('../models/user');
+const { googleVerify } = require('../helpers/google-verify');
 
 const login = async (req, res = response) => {
     const { email, password } = req.body;
@@ -21,7 +22,7 @@ const login = async (req, res = response) => {
         // Password validation
         const validPassword = bcrypt.compareSync(password, userDB.password);
         if (!validPassword) {
-            res.status(400).json({
+            return res.status(400).json({
                 ok: false,
                 msg: 'Password is not valid'
             })
@@ -44,6 +45,44 @@ const login = async (req, res = response) => {
     }
 }
 
+const googleLogIn = async (req, res = response) => {
+    try {
+        const { email, name, picture } = await googleVerify(req.body.token);
+        let user;
+        const userDB = await User.findOne({ email });
+
+        if (!userDB) {
+            user = new User({
+                name,
+                email,
+                password: '@@@',
+                image: picture,
+                google: true
+            });
+        } else {
+            user = userDB;
+            user.google = true
+        }
+
+        await user.save();
+
+        const token = await generateJWT(user.uid);
+
+        res.json({
+            ok: true,
+            email, name, picture,
+            token
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Google token is not correct'
+        });
+    }
+}
+
 module.exports = {
-    login
+    login, googleLogIn
 }
