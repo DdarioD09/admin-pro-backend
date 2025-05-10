@@ -45,10 +45,29 @@ const createHospital = async (req, res = response) => {
 }
 
 const updateHospital = async (req, res = response) => {
+    const { uid } = req;
+    const { id } = req.params;
+
     try {
+        const hospital = await Hospital.findById(id);
+
+        if (!hospital) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'Hospital does not exist'
+            })
+        }
+
+        const updatedValues = {
+            ...req.body,
+            user: uid
+        }
+
+        const updatedHospital = await Hospital.findByIdAndUpdate(id, updatedValues, { new: true })
+
         res.json({
             ok: true,
-            msg: 'All good'
+            hospital: updatedHospital
         })
 
     } catch (error) {
@@ -62,10 +81,23 @@ const updateHospital = async (req, res = response) => {
 }
 
 const deleteHospital = async (req, res = response) => {
+    const { id } = req.params
+
     try {
+        const hospital = await Hospital.findById(id);
+
+        if (!hospital) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'Hospital does not exist'
+            });
+        }
+
+        await Hospital.findByIdAndDelete(id);
+
         res.json({
             ok: true,
-            msg: 'All good'
+            msg: 'Hospital deleted'
         })
 
     } catch (error) {

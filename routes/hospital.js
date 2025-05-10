@@ -20,9 +20,12 @@ router.post('/',
 
 router.put('/:id',
     [
+        // JWTValidation,
+        check('name', 'Hospital name is required').notEmpty(),
+        fieldValidation
     ],
     updateHospital);
 
-router.delete('/:id', deleteHospital);
+router.delete('/:id', JWTValidation, deleteHospital);
 
 module.exports = router;
