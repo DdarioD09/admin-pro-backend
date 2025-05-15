@@ -56,7 +56,7 @@ const googleLogIn = async (req, res = response) => {
                 name,
                 email,
                 password: '@@@',
-                image: picture,
+                img: picture,
                 google: true
             });
         } else {
@@ -65,8 +65,7 @@ const googleLogIn = async (req, res = response) => {
         }
 
         await user.save();
-
-        const token = await generateJWT(user.uid);
+        const token = await generateJWT(user.id);
 
         res.json({
             ok: true,
