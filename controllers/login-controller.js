@@ -84,13 +84,21 @@ const googleLogIn = async (req, res = response) => {
 
 const renewToken = async (req, res = response) => {
     const { uid } = req;
+    try {
+        const token = await generateJWT(uid);
+        const user = await User.findById(uid);
+        res.json({
+            ok: true,
+            token,
+            user
+        })
 
-    const token = await generateJWT(uid);
-
-    res.json({
-        ok: true,
-        token
-    })
+    } catch (error) {
+        res.status(500).json({
+            ok: false,
+            msg: 'User not found'
+        })
+    }
 }
 
 module.exports = {
