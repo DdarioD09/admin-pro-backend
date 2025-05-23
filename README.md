@@ -4,14 +4,14 @@ This is a hands-on project that gives you a CRUD for doctors, hospitals and user
 
 ## Database
 It uses MongoDB as database, following this structure:
-![Mongo Structure](https://github.com/user-attachments/assets/b7da0657-a9c7-46e4-8394-f09e021ae45f)
+![Mongo Structure](https://github.com/user-attachments/assets/b7da0657-a9c7-46e4-8394-f09e021ae45f)\
 
 ## Authentication 
 It uses JWT for token generation for auth sessions, and implements the [Google Sign in](https://developers.google.com/identity/gsi/web/guides/overview "Google Sing in") service to provide authentication in the app througth Google accounts.
 
 ## Considerations
 
-Keep in mind that if you want this project up and runing in your local, you will need to setup some enviroment variables int the `.env` file, which is not published in this repository. :shipit:\
+Keep in mind that if you want this project up and runing in your local, you will need to setup some enviroment variables int the `.env` file, which is not published in this repository.
 The env variables that you need to set for getting this project working are: 👇🏽
 
 * `PORT` It is the port where the backend will be deployed.
