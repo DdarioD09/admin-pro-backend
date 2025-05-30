@@ -7,3 +7,7 @@ on:
 jobs:
   deploy-codigofacilito:
     runs-on: ubuntu-latest
+      steps:
+        run: echo "pull of the code"
+        run: echo "Run migrations"
+        run: echo "Publish release with the new version"
