@@ -1,0 +1,9 @@
+name: "Deploy Codigo Facilito"
+
+on:
+  push:
+    branches: ["master"]
+
+jobs:
+  deploy-codigofacilito:
+    runs-on: ubuntu-latest
