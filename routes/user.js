@@ -1,13 +1,13 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
 
-const { getUsers, createUser, updateUser, deleteUser } = require('../controllers/user-controller');
+const { getUsers, createUser, updateUser, deleteUser, selfUpdateUser } = require('../controllers/user-controller');
 const { fieldValidation } = require('../middlewares/field-validation');
-const { JWTValidation } = require('../middlewares/jwt-validation');
+const { JWTValidation, adminRoleValidation } = require('../middlewares/jwt-validation');
 
 const router = Router();
 
-router.get('/', JWTValidation, getUsers);
+router.get('/', [JWTValidation, adminRoleValidation], getUsers);
 
 router.post('/',
     [
@@ -21,6 +21,7 @@ router.post('/',
 router.put('/:id',
     [
         JWTValidation,
+        adminRoleValidation,
         check('name', 'Name is required').not().isEmpty(),
         check('email', 'Email is required').isEmail(),
         check('role', 'Role is required').not().isEmpty(),
@@ -28,6 +29,16 @@ router.put('/:id',
     ],
     updateUser);
 
-router.delete('/:id', JWTValidation, deleteUser);
+router.put('/profile/:id',
+    [
+        JWTValidation,
+        check('name', 'Name is required').not().isEmpty(),
+        check('email', 'Email is required').isEmail(),
+        // check('role', 'Role is required').not().isEmpty(),
+        fieldValidation
+    ],
+    selfUpdateUser);
+
+router.delete('/:id', [JWTValidation, adminRoleValidation], deleteUser);
 
 module.exports = router;

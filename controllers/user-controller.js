@@ -113,6 +113,23 @@ const updateUser = async (req, res) => {
     }
 }
 
+const selfUpdateUser = async (req, res = response) => {
+    const { uid } = req
+    const { id } = req.params
+
+    if (uid !== id) {
+        return res.status(403).json({
+            ok: false,
+            msg: 'Unauthorized, you can only update your information'
+        })
+    }
+
+    const { role, ...fields } = req.body
+    req.body = fields;
+
+    return updateUser(req, res);
+}
+
 deleteUser = async (req, res = response) => {
     const uid = req.params.id;
 
@@ -143,5 +160,5 @@ deleteUser = async (req, res = response) => {
 }
 
 module.exports = {
-    getUsers, createUser, updateUser, deleteUser
+    getUsers, createUser, updateUser, selfUpdateUser, deleteUser
 }
