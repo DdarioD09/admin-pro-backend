@@ -1,6 +1,6 @@
 # AdminPro - Backend
 
-This is a hands-on project that gives you a CRUD for doctors, hospitals and users. This services are used for in the Frontend repository [Admin-pro](https://github.com/DdarioD09/angular-adv-adminpro "Admin-pro").
+This is a hands-on project that gives you a CRUD for doctors, hospitals and users. This services are used in the Frontend repository [Admin-pro](https://github.com/DdarioD09/angular-adv-adminpro "Admin-pro").
 
 ## Database
 It uses MongoDB as database, following this structure:
