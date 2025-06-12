@@ -1,12 +1,14 @@
 require('dotenv').config();
 
 const express = require('express');
-const cors = require('cors')
+const cors = require('cors');
+const path = require('path')
 
 const { dbConection } = require('./database/config');
 
 // Create express server
 const app = express();
+const PORT = process.env.PORT || 3000;
 
 // CORS configuration
 app.use(cors());
@@ -21,11 +23,6 @@ app.use(express.json());
 // Database
 dbConection();
 
-// Create express server
-app.listen(process.env.PORT, () => {
-    console.log('server running on server port ' + process.env.PORT);
-});
-
 // Routes
 // app.use('/api/users', require('./routes/user'));
 app.use('/api/users', require('./routes/user'));
@@ -35,3 +32,13 @@ app.use('/api/login', require('./routes/auth'));
 app.use('/api/login/google', require('./routes/auth'));
 app.use('/api/all', require('./routes/search'));
 app.use('/api/upload', require('./routes/upload-file'));
+
+// SPA Fallback: serve index.html for any non-API route
+app.get(/^\/(?!api).*/, (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Create express server
+app.listen(PORT, () => {
+    console.log('server running on server port ' + process.env.PORT);
+});
